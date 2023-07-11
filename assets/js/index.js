@@ -3,6 +3,6 @@ $(function () {
   $("#units-switch").on("change", function () {
     $(this)
       .siblings("label")
-      .text($(this).is(":checked") ? "Fahrenheit" : "Celsius");
+      .text($(this).is(":checked") ? "Celsius" : "Fahrenheit");
   });
 });

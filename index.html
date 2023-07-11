@@ -22,7 +22,8 @@
         </div>
       </nav>
       <main class="row flex-fill">
-        <aside class="col-3">
+        <aside class="col-3 col-md-4">
+          <!-- Enter City -->
           <div>
             <label for="city-name" class="form-label">Search for a City:</label>
             <input
@@ -32,7 +33,7 @@
               aria-label="city-name"
             />
           </div>
-
+          <!-- Select Units -->
           <div class="form-check form-switch">
             <input
               id="units-switch"
@@ -46,9 +47,10 @@
               for="units-switch"
             ></label>
           </div>
+          <!-- Search -->
           <button>Search</button>
         </aside>
-        <section class="col-9">
+        <section class="col-9 col-md-8">
           <div id="city-info" class="container-fluid row"></div>
           <h2>5 Day Forecast</h2>
           <div id="forecast" class="row">

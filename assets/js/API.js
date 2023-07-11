@@ -1,4 +1,4 @@
-let apiKey = "";
+let apiKey = "ea4f737616d8a7b0106129cadbff084c";
 let baseUrl = "http://api.openweathermap.org/";
 
 /**

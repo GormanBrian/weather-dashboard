@@ -1,24 +1,30 @@
 let celsius = "Celsius";
 let fahrenheit = "Fahrenheit";
-let units = celsius;
 
 $(() => {
   let WeatherAPI = new OpenWeatherMapAPI();
 
+  /**
+   * Displays the 5-day weather forecast in the DOM
+   * @param {Object} city Open Weather Map city object
+   * @param {Array<Object>} list List of timestamped weather reports
+   */
   const displayForecast = (city, list) => {
     // Display 5-day forecast and city information
+    console.log(city);
+    console.log(list);
   };
 
   /**
-   * Updates units switch label on toggle
+   * Checks if the units switch is checked
+   * @returns {boolean} True if checked, false if unchecked
    */
-  const handleUnitsSwitchChange = () => {
-    units = $(this).is(":checked") ? celsius : fahrenheit;
-    $("units-switch-label").text(units);
-  };
+  const isUnitsChecked = () => $("#units-switch").is(":checked");
 
-  // Listen for units switch change
-  $("#units-switch").on("change", handleUnitsSwitchChange);
+  // Listen for units switch change and updates label
+  $("#units-switch").on("change", function () {
+    $("#units-switch-label").text(isUnitsChecked() ? celsius : fahrenheit);
+  });
 
   /**
    * Gets the coordinates and then forecast results from API,
@@ -33,15 +39,15 @@ $(() => {
     await WeatherAPI.fetchCoordinates(cityName)
       .then((coordinatesResult) => {
         WeatherAPI.fetchForecast(
-          coordinatesResult.lat,
-          coordinatesResult.lon,
-          units === celsius ? "metric" : "imperial"
+          coordinatesResult[0].lat,
+          coordinatesResult[0].lon,
+          "units=" + (isUnitsChecked() ? "metric" : "imperial")
         )
           .then((forecastResult) => {
             displayForecast(
               {
                 ...forecastResult.city,
-                state: coordinatesResult.state,
+                state: coordinatesResult[0].state,
               },
               forecastResult.list
             );

@@ -2,9 +2,9 @@ let apiKey = "ea4f737616d8a7b0106129cadbff084c";
 let baseUrl = "http://api.openweathermap.org/";
 
 /**
- * Creates an OWM API URL
+ * Creates a generic OWM API URL
  * @param {string} resource Location of the API resource
- * @param  {...string} options Additional options
+ * @param  {...string} options Additional option
  * @returns {string} Constructed OWM API URL
  */
 function createUrl(resource, ...options) {
@@ -23,8 +23,8 @@ function createUrl(resource, ...options) {
 /**
  * Creates an OWM API URL for the Geocoding service based on city name
  * @param {string} city Name of the city
- * @param {number} limit Number of results to return
- * @param  {...string} options Additional options
+ * @param {number} [limit=1] Number of results to return
+ * @param  {...string} options Additional option
  * @returns Constructed Geocoding API URL
  */
 function createGeoUrl(city, limit = 1, ...options) {
@@ -35,7 +35,7 @@ function createGeoUrl(city, limit = 1, ...options) {
  * Creates an OWM API URL for the 5-Day Forecast based on geodetic coordinates
  * @param {number} lat Latitudinal coordinate
  * @param {number} lon Longitudinal coordinate
- * @param  {...any} options Additional options
+ * @param  {...any} options Additional option
  * @returns Constructed 5-Day Forecast API URL
  */
 function createForecastUrl(lat, lon, ...options) {

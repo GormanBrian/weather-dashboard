@@ -42,6 +42,11 @@ function createForecastUrl(lat, lon, ...options) {
   return createUrl("data/2.5/forecast", `lat=${lat}`, `lon=${lon}`, ...options);
 }
 
+const handleResponse = (response) => {
+  if (!response.ok) throw new Error(response.status);
+  return response.json();
+};
+
 /**
  *
  * @param {string} city Name of the city
@@ -50,10 +55,7 @@ function createForecastUrl(lat, lon, ...options) {
 async function fetchCoordinates(city) {
   let url = createGeoUrl(city);
   return fetch(url)
-    .then((response) => {
-      if (!response.ok) throw new Error(response.status);
-      return response.json();
-    })
+    .then(handleResponse)
     .then((data) => {
       if (data.length === 0) throw new Error("Invalid city name");
       return {
@@ -68,10 +70,7 @@ async function fetchCoordinates(city) {
 async function fetchForecast(lat, lon, units) {
   let url = createForecastUrl(lat, lon, units);
   return fetch(url)
-    .then((response) => {
-      if (!response.ok) throw new Error(response.status);
-      return response.json();
-    })
+    .then(handleResponse)
     .then((data) => {
       return data;
     });

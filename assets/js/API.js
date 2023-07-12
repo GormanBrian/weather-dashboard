@@ -4,10 +4,10 @@ class API {
   /**
    * Constructor for generic API object
    * @param {string} baseUrl API base URL
-   * @param {string} apiKeyName Parameter name of the api key
+   * @param {string} [apiKeyName=""] Parameter name of the api key
    * @param {string} [apiKey=""] API key
    */
-  constructor(baseUrl, apiKeyName, apiKey = "") {
+  constructor(baseUrl, apiKeyName = "", apiKey = "") {
     this.baseUrl = baseUrl;
     this.apiKeyName = apiKeyName;
     this.#apiKey = apiKey;
@@ -19,7 +19,7 @@ class API {
    * @param  {...string} options Additional option
    * @returns {string} Constructed OWM API URL
    */
-  createUrl = (resource, ...options) => {
+  createUrl(resource, ...options) {
     let url = this.baseUrl + resource;
 
     let params = [...options];
@@ -33,17 +33,17 @@ class API {
       });
     }
     return url;
-  };
+  }
 
   /**
    * Generic response handler
    * @param {Response} response Promise with response parameter
    * @returns Error if response is not ok, otherwise json of response
    */
-  handleResponse = (response) => {
+  handleResponse(response) {
     if (!response.ok) throw new Error(response.status);
     return response.json();
-  };
+  }
 }
 
 class OpenWeatherMapAPI extends API {

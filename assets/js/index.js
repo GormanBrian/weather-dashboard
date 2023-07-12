@@ -3,6 +3,8 @@ let fahrenheit = "Fahrenheit";
 let units = celsius;
 
 $(() => {
+  let WeatherAPI = new OpenWeatherMapAPI();
+
   const displayForecast = (city, list) => {
     // Display 5-day forecast and city information
   };
@@ -28,9 +30,9 @@ $(() => {
 
     let cityName = $("#city-name").val();
 
-    await fetchCoordinates(cityName)
+    await WeatherAPI.fetchCoordinates(cityName)
       .then((coordinatesResult) => {
-        fetchForecast(
+        WeatherAPI.fetchForecast(
           coordinatesResult.lat,
           coordinatesResult.lon,
           units === celsius ? "metric" : "imperial"

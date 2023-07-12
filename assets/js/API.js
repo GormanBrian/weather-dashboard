@@ -22,7 +22,7 @@ class API {
    * @param  {...string} options Additional option
    * @returns {string} Constructed OWM API URL
    */
-  createUrl(resource, ...options) {
+  constructUrl(resource, ...options) {
     let url = this.baseUrl + resource;
 
     let params = [...options];
@@ -36,6 +36,31 @@ class API {
       });
     }
     return url;
+  }
+
+  /**
+   * Checks if the passed string is a valid URL
+   * @param {string} str String containing URL or parameter
+   * @returns {boolean} True if the string is a URL, false otherwise
+   */
+  isValidUrl(str) {
+    try {
+      let url = new URL(str);
+      return url.protocol === "http:" || url.protocol === "https:";
+    } catch (_) {
+      return false;
+    }
+  }
+
+  /**
+   * Returns
+   * @param {string} str
+   * @param {function} createUrl
+   * @param {...string} options
+   * @returns {string} Valid URL string
+   */
+  getValidUrl(str, createUrl, options = []) {
+    return this.isValidUrl(str) ? str : createUrl(str, ...options);
   }
 
   /**
@@ -114,8 +139,8 @@ class OpenWeatherMapAPI extends API {
    * @param  {...string} options Additional option
    * @returns Constructed Geocoding API URL
    */
-  createGeoUrl = (city, limit = 1, ...options) =>
-    super.createUrl(
+  constructCoordinateUrl = (city, limit = 1, ...options) =>
+    super.constructUrl(
       "geo/1.0/direct",
       `q=${city}`,
       `limit=${limit}`,
@@ -129,8 +154,8 @@ class OpenWeatherMapAPI extends API {
    * @param  {...any} options Additional option
    * @returns Constructed 5-Day Forecast API URL
    */
-  createForecastUrl = (lat, lon, ...options) =>
-    super.createUrl(
+  constructForecastUrl = (lat, lon, ...options) =>
+    super.constructUrl(
       "data/2.5/forecast",
       `lat=${lat}`,
       `lon=${lon}`,
@@ -142,8 +167,8 @@ class OpenWeatherMapAPI extends API {
    * @param {string} city Name of the city
    * @returns Promise with data or error
    */
-  fetchCoordinates = async (city) => {
-    return fetch(this.createGeoUrl(city))
+  fetchCoordinates = async (str) =>
+    fetch(super.getValidUrl(str, this.constructCoordinateUrl))
       .then(super.handleResponse)
       .then((data) => {
         return super.getDataObjectsWithKeys(
@@ -152,18 +177,22 @@ class OpenWeatherMapAPI extends API {
           "Invalid city name"
         );
       });
-  };
 
   /**
    * Fetches the 5-day forecast for the coordinates and returns a promise
-   * @param {number} lat Latitudinal geodetic coordinate
-   * @param {number} lon Longitudinal geodetic coordinate
-   * @param {string} units Metric or imperial
+   * @param url Forecast URL
    * @returns Promise with data or error
    */
-  fetchForecast = async (lat, lon, units) => {
-    return fetch(this.createForecastUrl(lat, lon, units)).then(
-      super.handleResponse
-    );
-  };
+  fetchForecast = async (str, start = 3, inc = 8) =>
+    fetch(super.getValidUrl(str, this.constructForecastUrl))
+      .then(super.handleResponse)
+      .then((data) => {
+        let intervalData = [];
+        for (let i = start; i < data.length; i += inc) {
+          intervalData.push(data[i]);
+        }
+        return intervalData;
+      });
 }
+
+// for (let i = 3; i < data.length; i+= 8)

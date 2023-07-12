@@ -11,8 +11,8 @@ $(() => {
    */
   const displayForecast = (city, list) => {
     // Display 5-day forecast and city information
-    console.log(city);
-    console.log(list);
+    // console.log(city);
+    // console.log(list);
   };
 
   /**
@@ -38,12 +38,14 @@ $(() => {
 
     await WeatherAPI.fetchCoordinates(cityName)
       .then((coordinatesResult) => {
-        WeatherAPI.fetchForecast(
+        let forecastUrl = WeatherAPI.constructForecastUrl(
           coordinatesResult[0].lat,
           coordinatesResult[0].lon,
           "units=" + (isUnitsChecked() ? "metric" : "imperial")
-        )
+        );
+        WeatherAPI.fetchForecast(forecastUrl)
           .then((forecastResult) => {
+            console.log(forecastResult);
             displayForecast(
               {
                 ...forecastResult.city,

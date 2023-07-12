@@ -187,12 +187,13 @@ class OpenWeatherMapAPI extends API {
     fetch(super.getValidUrl(str, this.constructForecastUrl))
       .then(super.handleResponse)
       .then((data) => {
-        let intervalData = [];
-        for (let i = start; i < data.length; i += inc) {
-          intervalData.push(data[i]);
+        let intervalData = {
+          city: data.city,
+          list: [],
+        };
+        for (let i = start; i < data.list.length; i += inc) {
+          intervalData.list.push(data.list[i]);
         }
         return intervalData;
       });
 }
-
-// for (let i = 3; i < data.length; i+= 8)

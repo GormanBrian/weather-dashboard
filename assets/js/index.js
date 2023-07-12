@@ -1,9 +1,12 @@
+let celsius = "Celsius";
+let fahrenheit = "Fahrenheit";
+let units = celsius;
+
 $(function () {
   // Listen for units switch change
   $("#units-switch").on("change", function () {
-    $(this)
-      .siblings("label")
-      .text($(this).is(":checked") ? "Celsius" : "Fahrenheit");
+    units = $(this).is(":checked") ? celsius : fahrenheit;
+    $("units-switch-label").text(units);
   });
 
   $("#search-form").on("submit", async function (event) {
@@ -11,14 +14,28 @@ $(function () {
 
     let cityName = $("#city-name").val();
 
-    let cityObj;
-
     await fetchCoordinates(cityName)
-      .then((result) => {
-        cityObj = result;
+      .then((coordinatesResult) => {
+        fetchForecast(
+          coordinatesResult.lat,
+          coordinatesResult.lon,
+          units === celsius ? "metric" : "imperial"
+        )
+          .then((forecastResult) => {
+            let currentForecast = {
+              city: {
+                ...forecastResult.city,
+                state: coordinatesResult.state,
+              },
+              list: forecastResult.list,
+            };
+          })
+          .catch((forecastError) => {
+            console.log(forecastError);
+          });
       })
-      .catch((error) => {
-        // Show alert with error message
+      .catch((coordinatesError) => {
+        console.log(coordinatesError);
       });
   });
 });

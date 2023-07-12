@@ -39,7 +39,7 @@ function createGeoUrl(city, limit = 1, ...options) {
  * @returns Constructed 5-Day Forecast API URL
  */
 function createForecastUrl(lat, lon, ...options) {
-  return createUrl("data/2.5/forecast", lat, lon, ...options);
+  return createUrl("data/2.5/forecast", `lat=${lat}`, `lon=${lon}`, ...options);
 }
 
 /**
@@ -62,5 +62,17 @@ async function fetchCoordinates(city) {
         city: data[0].name,
         state: data[0].state,
       };
+    });
+}
+
+async function fetchForecast(lat, lon, units) {
+  let url = createForecastUrl(lat, lon, units);
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      return response.json();
+    })
+    .then((data) => {
+      return data;
     });
 }

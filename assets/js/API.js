@@ -42,6 +42,11 @@ function createForecastUrl(lat, lon, ...options) {
   return createUrl("data/2.5/forecast", `lat=${lat}`, `lon=${lon}`, ...options);
 }
 
+/**
+ * Generic response handler
+ * @param {function} response Promise with response parameter
+ * @returns Error if response is not ok, otherwise json of response
+ */
 const handleResponse = (response) => {
   if (!response.ok) throw new Error(response.status);
   return response.json();
@@ -75,9 +80,5 @@ async function fetchCoordinates(city) {
  */
 async function fetchForecast(lat, lon, units) {
   let url = createForecastUrl(lat, lon, units);
-  return fetch(url)
-    .then(handleResponse)
-    .then((data) => {
-      return data;
-    });
+  return fetch(url).then(handleResponse);
 }

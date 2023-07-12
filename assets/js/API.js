@@ -1,8 +1,16 @@
 class API {
-  constructor(baseUrl, apiKeyName, apiKey) {
+  #apiKey;
+
+  /**
+   * Constructor for generic API object
+   * @param {string} baseUrl API base URL
+   * @param {string} apiKeyName Parameter name of the api key
+   * @param {string} [apiKey=""] API key
+   */
+  constructor(baseUrl, apiKeyName, apiKey = "") {
     this.baseUrl = baseUrl;
     this.apiKeyName = apiKeyName;
-    this.apiKey = apiKey;
+    this.#apiKey = apiKey;
   }
 
   /**
@@ -13,14 +21,17 @@ class API {
    */
   createUrl = (resource, ...options) => {
     let url = this.baseUrl + resource;
-    if (options.length > 0) {
+
+    let params = [...options];
+    if (this.#apiKey !== "") params.push(this.apiKeyName + this.#apiKey);
+
+    if (params.length > 0) {
       url += "?";
-      options.forEach((option, index) => {
+      params.forEach((option, index) => {
         if (index !== 0) url += "&";
         url += option;
       });
     }
-    url += this.apiKeyName + this.apiKey;
     return url;
   };
 
@@ -36,6 +47,9 @@ class API {
 }
 
 class OpenWeatherMapAPI extends API {
+  /**
+   * Constructor for OWM API
+   */
   constructor() {
     super(
       "http://api.openweathermap.org/",

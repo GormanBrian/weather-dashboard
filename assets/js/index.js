@@ -3,6 +3,10 @@ let fahrenheit = "Fahrenheit";
 let units = celsius;
 
 $(function () {
+  function displayForecast(city, list) {
+    // Display 5-day forecast and city information
+  }
+
   // Listen for units switch change
   $("#units-switch").on("change", function () {
     units = $(this).is(":checked") ? celsius : fahrenheit;
@@ -22,13 +26,13 @@ $(function () {
           units === celsius ? "metric" : "imperial"
         )
           .then((forecastResult) => {
-            let currentForecast = {
-              city: {
+            displayForecast(
+              {
                 ...forecastResult.city,
                 state: coordinatesResult.state,
               },
-              list: forecastResult.list,
-            };
+              forecastResult.list
+            );
           })
           .catch((forecastError) => {
             console.log(forecastError);

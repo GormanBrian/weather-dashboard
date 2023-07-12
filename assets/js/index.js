@@ -2,7 +2,7 @@ let celsius = "Celsius";
 let fahrenheit = "Fahrenheit";
 let units = celsius;
 
-$(function () {
+$(() => {
   const displayForecast = (city, list) => {
     // Display 5-day forecast and city information
   };

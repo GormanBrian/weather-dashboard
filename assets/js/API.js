@@ -5,7 +5,7 @@ class API {
   #apiKey;
 
   /**
-   * Constructor for generic API object
+   * Constructor for generic API
    * @param {string} baseUrl API base URL
    * @param {string} [apiKeyName=""] Parameter name of the api key
    * @param {string} [apiKey=""] API key
@@ -52,24 +52,28 @@ class API {
    * Parses through an array and creates a new array of objects with selected keys
    * @param {Array<Object>} data Data array with full objects
    * @param {Array<string>} keys Keys to select from data objects
-   * @param {boolean} [strict=true] Throws an error if any object is missing a key
+   * @param {boolean} [strict=true] Throws an error if any object is missing a specified key
+   * @param {boolean} [hasAKey=true] Throws an error if any object does not have at least one specified key
    * @param {string} [noDataMessage="Data is empty"] Error message when data array is empty
    * @param {string} [missingKeyMessage="Object is missing key"] Error message when an object is missing a key
-   * @param {string} [noKeysMessage="No objects with keys exist"] Error message when no objects exist with selected keys
+   * @param {string} [noKeysMessage="Object does not have any keys"] Error message when an object is missing all keys
+   * @param {string} [noObjectsMessage="No objects with keys exist"] Error message when no objects exist with selected keys
    * @returns {Array<Object> | Error} Array of reduced objects or throws an error
    */
   getObjectsWithKeys(
     data,
     keys,
     strict = true,
+    hasAKey = true,
     noDataMessage = "Data is empty",
     missingKeyMessage = "Object is missing key",
-    noKeysMessage = "No objects with keys exist"
+    noKeysMessage = "Object does not have any keys",
+    noObjectsMessage = "No objects with keys exist"
   ) {
     if (data.length === 0) throw new Error(noDataMessage);
     if (keys.length === 0) return data;
 
-    let dataObj = [];
+    let dataArray = [];
     data.forEach((item, index) => {
       let currObj = {};
       keys.forEach((key) => {
@@ -79,11 +83,12 @@ class API {
             missingKeyMessage + "\nItem: " + index + " has no key: " + key
           );
       });
-      if (Object.keys(currObj).length > 0) dataObj.push(currObj);
+      if (Object.keys(currObj).length > 0) dataArray.push(currObj);
+      else if (hasAKey) throw new Error(noKeysMessage);
     });
 
-    if (dataObj.length === 0) throw new Error(noKeysMessage);
-    return dataObj;
+    if (dataArray.length === 0) throw new Error(noObjectsMessage);
+    return dataArray;
   }
 }
 
@@ -92,7 +97,7 @@ class API {
  */
 class OpenWeatherMapAPI extends API {
   /**
-   * Constructor for OWM API
+   * Constructor for Open Weather Map API
    */
   constructor() {
     super(

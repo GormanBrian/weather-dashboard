@@ -41,3 +41,26 @@ function createGeoUrl(city, limit = 1, ...options) {
 function createForecastUrl(lat, lon, ...options) {
   return createUrl("data/2.5/forecast", lat, lon, ...options);
 }
+
+/**
+ *
+ * @param {string} city Name of the city
+ * @returns Promise with data or error
+ */
+async function fetchCoordinates(city) {
+  let url = createGeoUrl(city);
+  return fetch(url)
+    .then((response) => {
+      if (!response.ok) throw new Error(response.status);
+      return response.json();
+    })
+    .then((data) => {
+      if (data.length === 0) throw new Error("Invalid city name");
+      return {
+        lat: data[0].lat,
+        lon: data[0].lon,
+        city: data[0].name,
+        state: data[0].state,
+      };
+    });
+}

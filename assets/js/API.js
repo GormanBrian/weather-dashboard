@@ -1,3 +1,6 @@
+/**
+ * Generic API class with helper functions
+ */
 class API {
   #apiKey;
 
@@ -38,7 +41,7 @@ class API {
   /**
    * Generic response handler
    * @param {Response} response Promise with response parameter
-   * @returns Error if response is not ok, otherwise json of response
+   * @returns Error if response is not ok, otherwise response body as JSON
    */
   handleResponse(response) {
     if (!response.ok) throw new Error(response.status);
@@ -46,6 +49,9 @@ class API {
   }
 }
 
+/**
+ * Open Weather Map API class
+ */
 class OpenWeatherMapAPI extends API {
   /**
    * Constructor for OWM API

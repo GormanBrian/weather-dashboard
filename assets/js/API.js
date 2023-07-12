@@ -48,7 +48,7 @@ const handleResponse = (response) => {
 };
 
 /**
- *
+ * Fetches the coordinates of a city and returns a promise
  * @param {string} city Name of the city
  * @returns Promise with data or error
  */
@@ -61,12 +61,18 @@ async function fetchCoordinates(city) {
       return {
         lat: data[0].lat,
         lon: data[0].lon,
-        city: data[0].name,
         state: data[0].state,
       };
     });
 }
 
+/**
+ * Fetches the 5-day forecast for the coordinates and returns a promise
+ * @param {number} lat Latitudinal geodetic coordinate
+ * @param {number} lon Longitudinal geodetic coordinate
+ * @param {string} units Metric or imperial
+ * @returns Promise with data or error
+ */
 async function fetchForecast(lat, lon, units) {
   let url = createForecastUrl(lat, lon, units);
   return fetch(url)

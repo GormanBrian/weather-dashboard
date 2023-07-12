@@ -7,7 +7,7 @@ let baseUrl = "http://api.openweathermap.org/";
  * @param  {...string} options Additional option
  * @returns {string} Constructed OWM API URL
  */
-function createUrl(resource, ...options) {
+const createUrl = (resource, ...options) => {
   let url = baseUrl + resource;
   if (options.length > 0) {
     url += "?";
@@ -18,7 +18,7 @@ function createUrl(resource, ...options) {
   }
   url += "&appid=" + apiKey;
   return url;
-}
+};
 
 /**
  * Creates an OWM API URL for the Geocoding service based on city name
@@ -27,9 +27,8 @@ function createUrl(resource, ...options) {
  * @param  {...string} options Additional option
  * @returns Constructed Geocoding API URL
  */
-function createGeoUrl(city, limit = 1, ...options) {
-  return createUrl("geo/1.0/direct", `q=${city}`, `limit=${limit}`, ...options);
-}
+const createGeoUrl = (city, limit = 1, ...options) =>
+  createUrl("geo/1.0/direct", `q=${city}`, `limit=${limit}`, ...options);
 
 /**
  * Creates an OWM API URL for the 5-Day Forecast based on geodetic coordinates
@@ -38,9 +37,8 @@ function createGeoUrl(city, limit = 1, ...options) {
  * @param  {...any} options Additional option
  * @returns Constructed 5-Day Forecast API URL
  */
-function createForecastUrl(lat, lon, ...options) {
-  return createUrl("data/2.5/forecast", `lat=${lat}`, `lon=${lon}`, ...options);
-}
+const createForecastUrl = (lat, lon, ...options) =>
+  createUrl("data/2.5/forecast", `lat=${lat}`, `lon=${lon}`, ...options);
 
 /**
  * Generic response handler
@@ -57,7 +55,7 @@ const handleResponse = (response) => {
  * @param {string} city Name of the city
  * @returns Promise with data or error
  */
-async function fetchCoordinates(city) {
+const fetchCoordinates = async (city) => {
   let url = createGeoUrl(city);
   return fetch(url)
     .then(handleResponse)
@@ -69,7 +67,7 @@ async function fetchCoordinates(city) {
         state: data[0].state,
       };
     });
-}
+};
 
 /**
  * Fetches the 5-day forecast for the coordinates and returns a promise
@@ -78,7 +76,7 @@ async function fetchCoordinates(city) {
  * @param {string} units Metric or imperial
  * @returns Promise with data or error
  */
-async function fetchForecast(lat, lon, units) {
+const fetchForecast = async (lat, lon, units) => {
   let url = createForecastUrl(lat, lon, units);
   return fetch(url).then(handleResponse);
-}
+};

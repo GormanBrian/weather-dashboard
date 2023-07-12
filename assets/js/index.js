@@ -3,17 +3,17 @@ let fahrenheit = "Fahrenheit";
 let units = celsius;
 
 $(function () {
-  function displayForecast(city, list) {
+  const displayForecast = (city, list) => {
     // Display 5-day forecast and city information
-  }
+  };
 
   /**
    * Updates units switch label on toggle
    */
-  function handleUnitsSwitchChange() {
+  const handleUnitsSwitchChange = () => {
     units = $(this).is(":checked") ? celsius : fahrenheit;
     $("units-switch-label").text(units);
-  }
+  };
 
   // Listen for units switch change
   $("#units-switch").on("change", handleUnitsSwitchChange);
@@ -23,7 +23,7 @@ $(function () {
    * call display functions based on response status
    * @param {Event} event Form submit event
    */
-  async function handleSearchFormSubmit(event) {
+  const handleSearchFormSubmit = async (event) => {
     event.preventDefault();
 
     let cityName = $("#city-name").val();
@@ -51,7 +51,7 @@ $(function () {
       .catch((coordinatesError) => {
         console.log(coordinatesError);
       });
-  }
+  };
 
   // Listen for search form submission
   $("#search-form").on("submit", handleSearchFormSubmit);

@@ -60,7 +60,7 @@ class API {
    * @param {string} [noObjectsMessage="No objects with keys exist"] Error message when no objects exist with selected keys
    * @returns {Array<Object> | Error} Array of reduced objects or throws an error
    */
-  getObjectsWithKeys(
+  getDataObjectsWithKeys(
     data,
     keys,
     strict = true,
@@ -147,7 +147,7 @@ class OpenWeatherMapAPI extends API {
     return fetch(url)
       .then(super.handleResponse)
       .then((data) => {
-        return super.getObjectsWithKeys(
+        return super.getDataObjectsWithKeys(
           data,
           ["lat", "lon", "state"],
           "Invalid city name"

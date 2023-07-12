@@ -143,8 +143,7 @@ class OpenWeatherMapAPI extends API {
    * @returns Promise with data or error
    */
   fetchCoordinates = async (city) => {
-    let url = this.createGeoUrl(city);
-    return fetch(url)
+    return fetch(this.createGeoUrl(city))
       .then(super.handleResponse)
       .then((data) => {
         return super.getDataObjectsWithKeys(
@@ -163,7 +162,8 @@ class OpenWeatherMapAPI extends API {
    * @returns Promise with data or error
    */
   fetchForecast = async (lat, lon, units) => {
-    let url = this.createForecastUrl(lat, lon, units);
-    return fetch(url).then(super.handleResponse);
+    return fetch(this.createForecastUrl(lat, lon, units)).then(
+      super.handleResponse
+    );
   };
 }

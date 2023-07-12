@@ -47,6 +47,44 @@ class API {
     if (!response.ok) throw new Error(response.status);
     return response.json();
   }
+
+  /**
+   * Parses through an array and creates a new array of objects with selected keys
+   * @param {Array<Object>} data Data array with full objects
+   * @param {Array<string>} keys Keys to select from data objects
+   * @param {boolean} [strict=true] Throws an error if any object is missing a key
+   * @param {string} [noDataMessage="Data is empty"] Error message when data array is empty
+   * @param {string} [missingKeyMessage="Object is missing key"] Error message when an object is missing a key
+   * @param {string} [noKeysMessage="No objects with keys exist"] Error message when no objects exist with selected keys
+   * @returns {Array<Object> | Error} Array of reduced objects or throws an error
+   */
+  getObjectsWithKeys(
+    data,
+    keys,
+    strict = true,
+    noDataMessage = "Data is empty",
+    missingKeyMessage = "Object is missing key",
+    noKeysMessage = "No objects with keys exist"
+  ) {
+    if (data.length === 0) throw new Error(noDataMessage);
+    if (keys.length === 0) return data;
+
+    let dataObj = [];
+    data.forEach((item, index) => {
+      let currObj = {};
+      keys.forEach((key) => {
+        if (item.hasOwnProperty(key)) currObj[key] = item[key];
+        else if (strict)
+          throw new Error(
+            missingKeyMessage + "\nItem: " + index + " has no key: " + key
+          );
+      });
+      if (Object.keys(currObj).length > 0) dataObj.push(currObj);
+    });
+
+    if (dataObj.length === 0) throw new Error(noKeysMessage);
+    return dataObj;
+  }
 }
 
 /**
@@ -104,12 +142,11 @@ class OpenWeatherMapAPI extends API {
     return fetch(url)
       .then(super.handleResponse)
       .then((data) => {
-        if (data.length === 0) throw new Error("Invalid city name");
-        return {
-          lat: data[0].lat,
-          lon: data[0].lon,
-          state: data[0].state,
-        };
+        return super.getObjectsWithKeys(
+          data,
+          ["lat", "lon", "state"],
+          "Invalid city name"
+        );
       });
   };
 

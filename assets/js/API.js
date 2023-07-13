@@ -135,6 +135,11 @@ class OpenWeatherMapAPI extends API {
     );
   }
 
+  /**
+   * Sets the start index and increment rate for the 5-day forecast
+   * @param {number} start Start index
+   * @param {number} inc Hours to increment by
+   */
   setForecastIncrement = (start, inc) => {
     this.forecastStartIndex = start;
     this.forecastIncrement = inc;
@@ -187,8 +192,8 @@ class OpenWeatherMapAPI extends API {
       });
 
   /**
-   *
-   * @param {string} type
+   * Fetches generic weather information and returns a promise with data
+   * @param {string} type Type of weather resource, weather or forecast
    * @param {number} lat
    * @param {number} lon
    * @returns {Promise}
@@ -199,7 +204,7 @@ class OpenWeatherMapAPI extends API {
     );
 
   /**
-   * Fetches the 5-day forecast for the coordinates and returns a promise with data
+   * Fetches the 5-day forecast for the coordinates and returns a promise with interval data
    * @param {string} type
    * @param {number} lat
    * @param {number} lon

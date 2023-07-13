@@ -10,13 +10,27 @@ $(() => {
    * @param {Array<Object>} list List of timestamped weather reports
    */
   const displayForecast = (city, list) => {
-    const forecastDayCard = () => {};
+    $("#forecast").html("");
 
-    console.log(city);
-    console.log(list);
+    const forecastCard = ({ dt_txt, weather, main, wind }) =>
+      $("<div>")
+        .addClass("card", "col-2")
+        .append($("<h3>").addClass("").text(dayjs(dt_txt).format("M/D/YYYY")))
+        .append(
+          $("<img>")
+            .addClass("")
+            .attr(
+              "src",
+              `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`
+            )
+        )
+        .append($("<p>").addClass("").text(main.temp))
+        .append($("<p>").addClass("").text(main.humidity))
+        .append($("<p>").addClass("").text(wind.speed));
 
-    // Display 5-day forecast and city information
-    let cityContainerEl = $(`<div></div>`);
+    list.forEach((day) => {
+      $("#forecast").append(forecastCard(day));
+    });
   };
 
   /**
@@ -41,7 +55,6 @@ $(() => {
     let cityName = $("#city-name").val();
 
     WeatherAPI.setForecastIncrement(3, 8);
-
     await WeatherAPI.fetchCoordinates(cityName)
       .then(async (coordinatesResult) => {
         await WeatherAPI.fetchForecast(

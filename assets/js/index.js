@@ -10,9 +10,12 @@ $(() => {
    * @param {Array<Object>} list List of timestamped weather reports
    */
   const displayForecast = (city, list) => {
-    // Display 5-day forecast and city information
-    // console.log(city);
+    const forecastDayCard = () => {};
+
     console.log(list);
+
+    // Display 5-day forecast and city information
+    let cityContainerEl = $(`<div></div>`);
   };
 
   /**
@@ -37,16 +40,16 @@ $(() => {
     let cityName = $("#city-name").val();
 
     await WeatherAPI.fetchCoordinates(cityName)
-      .then((coordinatesResult) => {
+      .then(async (coordinatesResult) => {
         let forecastUrl = WeatherAPI.constructForecastUrl(
           coordinatesResult[0].lat,
           coordinatesResult[0].lon,
           "units=" + (isUnitsChecked() ? "metric" : "imperial")
         );
-
-        WeatherAPI.fetchForecast(forecastUrl)
+        await WeatherAPI.fetchForecast(forecastUrl)
           .then((forecastResult) => {
             console.log(forecastResult.list);
+
             displayForecast(
               {
                 ...forecastResult.city,

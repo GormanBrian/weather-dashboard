@@ -53,10 +53,10 @@ class API {
   }
 
   /**
-   * Returns
-   * @param {string} str
-   * @param {function} createUrl
-   * @param {...string} options
+   * Returns either the valid URL or a constructed URL
+   * @param {string} str String that is either a url or parameter
+   * @param {function} createUrl URL constructor function
+   * @param {...string} options Additional option
    * @returns {string} Valid URL string
    */
   getValidUrl(str, createUrl, options = []) {
@@ -167,7 +167,7 @@ class OpenWeatherMapAPI extends API {
    * @param {string} city Name of the city
    * @returns Promise with data or error
    */
-  fetchCoordinates = async (str) =>
+  fetchCoordinates = (str) =>
     fetch(super.getValidUrl(str, this.constructCoordinateUrl))
       .then(super.handleResponse)
       .then((data) => {
@@ -183,7 +183,7 @@ class OpenWeatherMapAPI extends API {
    * @param url Forecast URL
    * @returns Promise with data or error
    */
-  fetchForecast = async (str, start = 3, inc = 8) =>
+  fetchForecast = (str, start = 3, inc = 8) =>
     fetch(super.getValidUrl(str, this.constructForecastUrl))
       .then(super.handleResponse)
       .then((data) => {

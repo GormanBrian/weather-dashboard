@@ -121,6 +121,9 @@ class API {
  * Open Weather Map API class
  */
 class OpenWeatherMapAPI extends API {
+  forecastStartIndex = 0;
+  forecastIncrement = 1;
+
   /**
    * Constructor for Open Weather Map API
    */
@@ -131,6 +134,11 @@ class OpenWeatherMapAPI extends API {
       "ea4f737616d8a7b0106129cadbff084c"
     );
   }
+
+  setForecastIncrement = (start, inc) => {
+    this.forecastStartIndex = start;
+    this.forecastIncrement = inc;
+  };
 
   /**
    * Creates an OWM API URL for the Geocoding service based on city name
@@ -154,9 +162,9 @@ class OpenWeatherMapAPI extends API {
    * @param  {...any} options Additional option
    * @returns Constructed 5-Day Forecast API URL
    */
-  constructForecastUrl = (lat, lon, ...options) =>
+  constructWeatherUrl = (type, lat, lon, ...options) =>
     super.constructUrl(
-      "data/2.5/forecast",
+      "data/2.5/" + type,
       `lat=${lat}`,
       `lon=${lon}`,
       ...options
@@ -167,8 +175,8 @@ class OpenWeatherMapAPI extends API {
    * @param {string} city Name of the city
    * @returns Promise with data or error
    */
-  fetchCoordinates = (str) =>
-    fetch(super.getValidUrl(str, this.constructCoordinateUrl))
+  fetchCoordinates = (city, ...options) =>
+    fetch(this.constructCoordinateUrl(city, ...options))
       .then(super.handleResponse)
       .then((data) => {
         return super.getDataObjectsWithKeys(
@@ -179,21 +187,37 @@ class OpenWeatherMapAPI extends API {
       });
 
   /**
-   * Fetches the 5-day forecast for the coordinates and returns a promise
-   * @param url Forecast URL
-   * @returns Promise with data or error
+   *
+   * @param {string} type
+   * @param {number} lat
+   * @param {number} lon
+   * @returns {Promise}
    */
-  fetchForecast = (str, start = 3, inc = 8) =>
-    fetch(super.getValidUrl(str, this.constructForecastUrl))
-      .then(super.handleResponse)
-      .then((data) => {
-        let intervalData = {
-          city: data.city,
-          list: [],
-        };
-        for (let i = start; i < data.list.length; i += inc) {
-          intervalData.list.push(data.list[i]);
-        }
-        return intervalData;
-      });
+  fetchWeather = (type, lat, lon, ...options) =>
+    fetch(this.constructWeatherUrl(type, lat, lon, ...options)).then(
+      super.handleResponse
+    );
+
+  /**
+   * Fetches the 5-day forecast for the coordinates and returns a promise with data
+   * @param {string} type
+   * @param {number} lat
+   * @param {number} lon
+   * @returns {Promise}
+   */
+  fetchForecast = (type, lat, lon) =>
+    this.fetchWeather(type, lat, lon).then((data) => {
+      let intervalData = {
+        city: data.city,
+        list: [],
+      };
+      for (
+        let i = this.forecastStartIndex;
+        i < data.list.length;
+        i += this.forecastIncrement
+      ) {
+        intervalData.list.push(data.list[i]);
+      }
+      return intervalData;
+    });
 }

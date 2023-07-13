@@ -12,6 +12,7 @@ $(() => {
   const displayForecast = (city, list) => {
     const forecastDayCard = () => {};
 
+    console.log(city);
     console.log(list);
 
     // Display 5-day forecast and city information
@@ -39,17 +40,17 @@ $(() => {
 
     let cityName = $("#city-name").val();
 
+    WeatherAPI.setForecastIncrement(3, 8);
+
     await WeatherAPI.fetchCoordinates(cityName)
       .then(async (coordinatesResult) => {
-        let forecastUrl = WeatherAPI.constructForecastUrl(
+        await WeatherAPI.fetchForecast(
+          "forecast",
           coordinatesResult[0].lat,
           coordinatesResult[0].lon,
           "units=" + (isUnitsChecked() ? "metric" : "imperial")
-        );
-        await WeatherAPI.fetchForecast(forecastUrl)
+        )
           .then((forecastResult) => {
-            console.log(forecastResult.list);
-
             displayForecast(
               {
                 ...forecastResult.city,

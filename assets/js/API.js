@@ -211,8 +211,8 @@ class OpenWeatherMapAPI extends API {
    * @param {number} lon
    * @returns {Promise}
    */
-  fetchForecast = (type, lat, lon, ...options) =>
-    this.fetchWeather(type, lat, lon, ...options).then((data) => {
+  fetchForecast = (lat, lon, ...options) =>
+    this.fetchWeather("forecast", lat, lon, ...options).then((data) => {
       let intervalData = {
         city: data.city,
         list: [],

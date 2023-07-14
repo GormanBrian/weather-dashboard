@@ -25,7 +25,7 @@
         <div class="card">
           <form id="search-form" action="submit" class="card-body">
             <!-- Enter City -->
-            <div>
+            <div class-="mb-6">
               <label for="city-name" class="form-label"
                 >Search for a City:</label
               >
@@ -39,7 +39,7 @@
               />
             </div>
             <!-- Select Units -->
-            <div class="form-check form-switch">
+            <div class="form-check form-switch mb-6">
               <input
                 id="units-switch"
                 name="units-switch"
@@ -51,7 +51,7 @@
                 id="units-switch-label"
                 class="form-check-label"
                 for="units-switch"
-                >Celsius</label
+                >Metric</label
               >
             </div>
             <!-- Search -->
@@ -68,10 +68,10 @@
       <!-- Forecast Section -->
       <section class="col-12 col-md-8">
         <div id="city-info" class="row"></div>
-        <h2>5 Day Forecast</h2>
-        <div id="forecast" class="row">
+        <h2 class="row">5 Day Forecast</h2>
+        <ul id="forecast" class="row">
           <!--  -->
-        </div>
+        </ul>
       </section>
     </main>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>

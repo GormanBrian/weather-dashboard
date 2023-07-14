@@ -1,5 +1,5 @@
-let celsius = "Celsius";
-let fahrenheit = "Fahrenheit";
+let metric = "metric";
+let imperial = "imperial";
 
 $(() => {
   let WeatherAPI = new OpenWeatherMapAPI();
@@ -11,6 +11,7 @@ $(() => {
    */
   const displayForecast = (city, list) => {
     $("#forecast").html("");
+    console.log(list);
 
     const forecastCard = ({ dt_txt, weather, main, wind }) =>
       $("<div>")
@@ -18,10 +19,10 @@ $(() => {
         .append($("<h3>").addClass("").text(dayjs(dt_txt).format("M/D/YYYY")))
         .append(
           $("<img>")
-            .addClass("")
+            .addClass("rounded mx-auto d-block")
             .attr(
               "src",
-              `https://openweathermap.org/img/wn/${weather[0].icon}@2x.png`
+              `https://openweathermap.org/img/wn/${weather[0].icon}@4x.png`
             )
         )
         .append($("<p>").addClass("").text(main.temp))
@@ -37,11 +38,15 @@ $(() => {
    * Checks if the units switch is checked
    * @returns {boolean} True if checked, false if unchecked
    */
-  const isUnitsChecked = () => $("#units-switch").is(":checked");
+  const units = () => ($("#units-switch").is(":checked") ? metric : imperial);
+
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   // Listen for units switch change and updates label
   $("#units-switch").on("change", function () {
-    $("#units-switch-label").text(isUnitsChecked() ? celsius : fahrenheit);
+    $("#units-switch-label").text(capitalizeFirstLetter(units()));
   });
 
   /**
@@ -61,7 +66,7 @@ $(() => {
           "forecast",
           coordinatesResult[0].lat,
           coordinatesResult[0].lon,
-          "units=" + (isUnitsChecked() ? "metric" : "imperial")
+          "units=" + units()
         )
           .then((forecastResult) => {
             displayForecast(

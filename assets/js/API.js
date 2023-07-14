@@ -35,6 +35,7 @@ class API {
         url += option;
       });
     }
+    console.log(url);
     return url;
   }
 
@@ -210,8 +211,8 @@ class OpenWeatherMapAPI extends API {
    * @param {number} lon
    * @returns {Promise}
    */
-  fetchForecast = (type, lat, lon) =>
-    this.fetchWeather(type, lat, lon).then((data) => {
+  fetchForecast = (type, lat, lon, ...options) =>
+    this.fetchWeather(type, lat, lon, ...options).then((data) => {
       let intervalData = {
         city: data.city,
         list: [],

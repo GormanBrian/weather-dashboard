@@ -25,17 +25,33 @@ $(() => {
     cardClasses,
     headingClasses
   ) =>
-    element
-      .addClass("card", cardClasses)
-      .append($("<h3>").addClass(headingClasses).text(date.format("M/D/YYYY")))
-      .append(
-        $("<img>")
-          .addClass("rounded mx-auto d-block")
-          .attr("src", `https://openweathermap.org/img/wn/${icon}@4x.png`)
-      )
-      .append($("<p>").addClass("").text(temp))
-      .append($("<p>").addClass("").text(humidity))
-      .append($("<p>").addClass("").text(windSpeed));
+    element.addClass(cardClasses).append(
+      $("<div>")
+        .addClass("card text-center")
+        .append(
+          $("<h3>").addClass(headingClasses).text(date.format("M/D/YYYY"))
+        )
+        .append(
+          $("<img>")
+            .addClass("rounded mx-auto d-block")
+            .attr("src", `https://openweathermap.org/img/wn/${icon}@4x.png`)
+        )
+        .append(
+          $("<p>")
+            .addClass("")
+            .text("Temperature: " + temp)
+        )
+        .append(
+          $("<p>")
+            .addClass("")
+            .text("Humidity: " + humidity)
+        )
+        .append(
+          $("<p>")
+            .addClass("")
+            .text("Wind Speed: " + windSpeed)
+        )
+    );
 
   /**
    * Displays the current weather in the DOM
@@ -53,7 +69,7 @@ $(() => {
       main.temp,
       main.humidity,
       wind.speed,
-      "",
+      "col-8",
       ""
     );
   };
@@ -79,7 +95,7 @@ $(() => {
           main.temp,
           main.humidity,
           wind.speed,
-          "",
+          "col-3",
           ""
         )
       )

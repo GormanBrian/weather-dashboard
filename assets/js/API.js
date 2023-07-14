@@ -130,7 +130,7 @@ class OpenWeatherMapAPI extends API {
    */
   constructor() {
     super(
-      "http://api.openweathermap.org/",
+      "https://api.openweathermap.org/",
       "appid=",
       "ea4f737616d8a7b0106129cadbff084c"
     );

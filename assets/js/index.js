@@ -183,6 +183,7 @@ $(() => {
     city = capitalizeFirstLetter(city);
 
     let cities = JSON.parse(localStorage.getItem("cities"));
+    if (cities === null) cities = [];
 
     if (!cities.includes(city)) {
       cities.unshift(city);
@@ -200,17 +201,18 @@ $(() => {
    */
   const displayCities = () => {
     let cities = JSON.parse(localStorage.getItem("cities"));
+    if (cities === null) return;
     let citiesList = $("#cities-list");
     citiesList.html("");
 
-    if (cities.length === 0) return;
-
     cities.forEach((city) => {
       citiesList.append(
-        $("<button>").on("click", () => {
-          $("#city-name").val(city);
-          handleSearch();
-        })
+        $("<button>")
+          .text(city)
+          .on("click", () => {
+            $("#city-name").val(city);
+            handleSearch();
+          })
       );
     });
   };

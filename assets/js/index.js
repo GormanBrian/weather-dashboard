@@ -159,7 +159,7 @@ $(() => {
   };
 
   /**
-   *
+   * Save new city in local storage
    */
   const saveCity = () => {
     let city = $("#city-name").val().trim();
@@ -178,6 +178,10 @@ $(() => {
     displayCities();
   };
 
+  /**
+   * Displays buttons with search history
+   * @returns {null} Returns if no cities exist
+   */
   const displayCities = () => {
     let cities = JSON.parse(localStorage.getItem("cities"));
     let citiesList = $("#cities-list");
@@ -195,6 +199,7 @@ $(() => {
     });
   };
 
+  // Display cities already in local storage on page load
   displayCities();
 
   // Listen for search form submission

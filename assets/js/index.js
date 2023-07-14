@@ -55,15 +55,14 @@ $(() => {
 
   /**
    * Displays the current weather in the DOM
-   * @param {Object} data Current weather report
-   * @param {Array<Object>} data.weather Weather data
-   * @param {string} data.weather[].icon Icon representing the weather conditions
-
+   * @param {string} name Name of the city
+   * @param {Array<Object>} weather Weather data
+   * @param {string} weather[].icon Icon representing the weather conditions
+   * @param {Object} main Main weather data
    */
-  const displayWeather = ({ weather, main, wind }) => {
-    $("#city-info").html("");
+  const displayWeather = ({ name, weather, main, wind }) => {
     card(
-      $("#city-info"),
+      $("#city-info").html("").append($("<h2>").text(name)),
       dayjs(),
       weather[0].icon,
       main.temp,
@@ -155,13 +154,7 @@ $(() => {
           "units=" + units()
         )
           .then((forecastResult) => {
-            displayForecast(
-              // {
-              //   ...forecastResult.city,
-              //   state: coordinatesResult[0].state,
-              // },
-              forecastResult.list
-            );
+            displayForecast(forecastResult.list);
           })
           .catch((forecastError) => {
             console.log(forecastError);
